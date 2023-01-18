@@ -5,8 +5,8 @@ import UserInput from './UserInput'
 
 function App() {
 
-  const [amount1, setAmount1] = useState(1);
-  const [amount2, setAmount2] = useState(1);
+  const [amount1, setAmount1] = useState(0);
+  const [amount2, setAmount2] = useState('0');
   const [currency1, setCurrency1] = useState('USD');
   const [currency2, setCurrency2] = useState('EUR');
   const [rates, setRates] = useState([]);
@@ -27,25 +27,30 @@ function App() {
   }
 
   function handleCurrency1Change(currency1) {
-    setAmount2(numberFormat(amount1 * rates[currency2] / rates[currency1]));
     setCurrency1(currency1);
+    setAmount2(numberFormat(amount1 * rates[currency2] / rates[currency1]));
+  }
+
+  function handleCurrency2Change(currency2) {
+    setCurrency2(currency2);
+    setAmount2(numberFormat(amount1 * rates[currency2] / rates[currency1]));
   }
 
   return (
-    <div>
-      <UserInput
-        onAmountChange={handleAmount1Change}
-        onCurrencyChange={handleCurrency1Change}
-        currencies={Object.keys(rates)}
-        amount={amount1}
-        currency={currency1}/>
+    <div class="main">
+      <h1 id="pagetitle">Currency Converter</h1>
 
       <UserInput
-        onAmountChange={setAmount2}
-        onCurrencyChange={setCurrency2}
+        onAmountChange={handleAmount1Change}
+        onCurrency1Change={handleCurrency1Change}
+        onCurrency2Change={handleCurrency2Change}
         currencies={Object.keys(rates)}
-        amount={amount2}
-        currency={currency2}/>
+        amount={amount1}
+        currency1={currency1}
+        currency2={currency2}/>
+
+        <h2 class="result-text">Result:</h2>
+        <h2 class="result">{amount2} {currency2}</h2>
     </div>
   );
 }
